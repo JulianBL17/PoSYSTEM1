@@ -1,0 +1,34 @@
+name: Deploy Producción
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy_main:
+    name: Deploy to Main Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote ssh commands
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Entra a la carpeta de producción
+            cd /root/projects/electivaVNocturno/equipo-2/PoSYSTEM1_main/
+            
+            # Descarga los últimos cambios forzando que quede exactamente igual a GitHub
+            git fetch origin
+            git reset --hard origin/main
+            
+            # Crea el archivo .env con el secreto de GitHub
+            echo "${{ secrets.ENV_MAIN }}" > .env
+            
+            # Detiene los contenedores viejos y levanta la nueva versión
+            docker-compose down
+            docker-compose up -d --build
