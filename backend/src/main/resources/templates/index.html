@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>POS - Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h1>Sistema POS</h1>
+    <p>Bienvenido al sistema de punto de venta</p>
+
+    <div class="menu">
+        <a th:href="@{/productos}">Productos</a>
+        <a th:href="@{/usuarios}">Usuarios</a>
+        <a th:href="@{/ventas}">Ventas</a>
+    </div>
+</body>
+</html>

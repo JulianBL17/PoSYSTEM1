@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuarios</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+  <h1>Usuarios</h1>
+  <a th:href="@{/}">Inicio</a>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Correo</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+    <tr th:each="u : ${usuarios}">
+      <td th:text="${u.id}"></td>
+      <td th:text="${u.nombre}"></td>
+      <td th:text="${u.correo}"></td>
+      <td th:text="${u.rol}"></td>
+      <td>
+        <a th:href="@{/usuarios/editar/{id}(id=${u.id})}">Editar</a> |
+        <a th:href="@{/usuarios/eliminar/{id}(id=${u.id})}">Eliminar</a>
+      </td>
+    </tr>
+  </table>
+
+  <h3>Agregar / Editar Usuario</h3>
+  <form th:action="@{/usuarios/guardar}" th:object="${usuarioForm}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    Nombre: <input type="text" th:field="*{nombre}" /><br/>
+    Correo: <input type="email" th:field="*{correo}" /><br/>
+    Password: <input type="password" th:field="*{password}" /><br/>
+
+    Rol: <br/>
+    <label>
+      <input type="radio" th:field="*{rol}" value="ADMIN"/> Admin
+    </label><br/>
+    <label>
+      <input type="radio" th:field="*{rol}" value="USER"/> User
+    </label><br/>
+    <input type="radio" th:field="*{rol}" value="OTRO"/> Otro
+    </label><br/>
+
+    <button type="submit">Guardar</button>
+  </form>
+</body>
+</html>

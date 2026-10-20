@@ -1,0 +1,35 @@
+.login-page {
+	background: linear-gradient(145deg, #eaf2ec 0%, #f6f7f2 52%, #eaf0eb 100%);
+}
+
+.login-panel {
+	max-width: 440px;
+	border-radius: 8px;
+}
+
+.login-brand-mark {
+	display: grid;
+	width: 54px;
+	height: 54px;
+	place-items: center;
+	border-radius: 8px;
+	background: #e7f2eb;
+	color: #187447;
+	font-size: 1.5rem;
+}
+
+.login-eyebrow {
+	color: #187447;
+	font-size: 0.76rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.login-panel .input-group-text {
+	min-width: 46px;
+	justify-content: center;
+	border-color: #d8e0da;
+	background: #f7f9f7;
+	color: #69776f;
+}

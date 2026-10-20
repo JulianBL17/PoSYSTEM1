@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant POS</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: Arial, sans-serif;
+        }
+
+        /* LOGIN */
+        #loginScreen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #212529, #495057);
+        }
+
+        .login-card {
+            width: 400px;
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.25);
+        }
+
+        .restaurant-logo {
+            width: 75px;
+            height: 75px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            font-size: 35px;
+        }
+
+        /* APP */
+        #app {
+            display: none;
+        }
+
+        .sidebar {
+            min-height: 100vh;
+            background: #212529;
+            color: white;
+        }
+
+        .sidebar .nav-link {
+            color: #adb5bd;
+            padding: 13px 20px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: #dc3545;
+            color: white;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .module {
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        .dashboard-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.08);
+        }
+
+        .table-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.08);
+        }
+
+        .topbar {
+            background: white;
+            padding: 15px 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+
+        @media(max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginScreen">
+
+    <div class="card login-card p-4">
+
+        <div class="text-center mb-4">
+
+            <div class="restaurant-logo mb-3">
+                <i class="bi bi-shop"></i>
+            </div>
+
+            <h3 class="fw-bold">Restaurant POS</h3>
+
+            <p class="text-muted">
+                Sistema de gestión para restaurantes
+            </p>
+
+        </div>
+
+        <form id="loginForm">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Usuario
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    class="form-control"
+                    placeholder="Ingrese su usuario"
+                    required
+                >
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Contraseña
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    placeholder="Ingrese su contraseña"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-danger w-100"
+            >
+                <i class="bi bi-box-arrow-in-right"></i>
+                Iniciar sesión
+            </button>
+
+        </form>
+
+        <div
+            id="loginMessage"
+            class="alert alert-danger mt-3 d-none"
+        ></div>
+
+        <div class="text-center mt-3">
+
+            <small class="text-muted">
+                Usuario demo: admin
+                <br>
+                Contraseña: 1234
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     APLICACIÓN
+===================================================== -->
+
+<div id="app">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <!-- SIDEBAR -->
+
+            <aside class="col-md-3 col-lg-2 sidebar p-3">
+
+                <div class="text-center mb-4">
+
+                    <i class="bi bi-shop fs-1 text-danger"></i>
+
+                    <h5 class="mt-2">
+                        Restaurant POS
+                    </h5>
+
+                </div>
+
+                <nav class="nav flex-column">
+
+                    <a
+                        href="#"
+                        class="nav-link active"
+                        data-module="dashboard"
+                    >
+                        <i class="bi bi-speedometer2 me-2"></i>
+                        Dashboard
+                    </a>
+
+                    <a
+                        href="#"
+                        class="nav-link"
+                        data-module="usuarios"
+                    >
+                        <i class="bi bi-people me-2"></i>
+                        Gestión de usuarios
+                    </a>
+
+                    <a
+                        href="#"
+                        class="nav-link"
+                        data-module="proveedores"
+                    >
+                        <i class="bi bi-truck me-2"></i>
+                        Gestión de proveedores
+                    </a>
+
+                    <a
+                        href="#"
+                        class="nav-link"
+                        data-module="inventario"
+                    >
+                        <i class="bi bi-box-seam me-2"></i>
+                        Gestión de inventario
+                    </a>
+
+                    <a
+                        href="#"
+                        class="nav-link"
+                        data-module="pagos"
+                    >
+                        <i class="bi bi-credit-card me-2"></i>
+                        Pagos
+                    </a>
+
+                    <hr>
+
+                    <a
+                        href="#"
+                        class="nav-link text-danger"
+                        id="logoutBtn"
+                    >
+                        <i class="bi bi-box-arrow-left me-2"></i>
+                        Cerrar sesión
+                    </a>
+
+                </nav>
+
+            </aside>
+
+
+            <!-- CONTENIDO -->
+
+            <main class="col-md-9 col-lg-10 p-0">
+
+                <!-- TOPBAR -->
+
+                <div class="topbar d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <h5 class="mb-0" id="pageTitle">
+                            Dashboard
+                        </h5>
+
+                    </div>
+
+                    <div>
+
+                        <i class="bi bi-person-circle fs-4"></i>
+
+                        <span class="ms-2">
+                            Administrador
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="content">
+
+                    <!-- =================================================
+                         DASHBOARD
+                    ================================================== -->
+
+                    <section
+                        id="dashboard"
+                        class="module active"
+                    >
+
+                        <h2 class="mb-4">
+                            Panel principal
+                        </h2>
+
+                        <div class="row g-4">
+
+                            <div class="col-md-3">
+
+                                <div class="card dashboard-card p-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <div>
+
+                                            <p class="text-muted mb-1">
+                                                Usuarios
+                                            </p>
+
+                                            <h3 id="totalUsuarios">
+                                                0
+                                            </h3>
+
+                                        </div>
+
+                                        <i class="bi bi-people fs-1 text-primary"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="card dashboard-card p-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <div>
+
+                                            <p class="text-muted mb-1">
+                                                Proveedores
+                                            </p>
+
+                                            <h3 id="totalProveedores">
+                                                0
+                                            </h3>
+
+                                        </div>
+
+                                        <i class="bi bi-truck fs-1 text-success"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="card dashboard-card p-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <div>
+
+                                            <p class="text-muted mb-1">
+                                                Productos
+                                            </p>
+
+                                            <h3 id="totalProductos">
+                                                0
+                                            </h3>
+
+                                        </div>
+
+                                        <i class="bi bi-box-seam fs-1 text-warning"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="card dashboard-card p-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <div>
+
+                                            <p class="text-muted mb-1">
+                                                Ventas
+                                            </p>
+
+                                            <h3 id="totalVentas">
+                                                $0
+                                            </h3>
+
+                                        </div>
+
+                                        <i class="bi bi-cash-stack fs-1 text-danger"></i>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card table-card mt-4 p-4">
+
+                            <h5>
+                                Bienvenido al sistema POS
+                            </h5>
+
+                            <p class="text-muted">
+
+                                Desde este panel puede administrar
+                                usuarios, proveedores, inventario y pagos
+                                del restaurante.
+
+                            </p>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         USUARIOS
+                    ================================================== -->
+
+                    <section
+                        id="usuarios"
+                        class="module"
+                    >
+
+                        <div class="d-flex justify-content-between mb-4">
+
+                            <h2>
+                                Gestión de usuarios
+                            </h2>
+
+                            <button
+                                class="btn btn-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#usuarioModal"
+                            >
+                                <i class="bi bi-plus-circle"></i>
+                                Nuevo usuario
+                            </button>
+
+                        </div>
+
+
+                        <div class="card table-card p-3">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Correo</th>
+                                            <th>Rol</th>
+                                            <th>Acciones</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="usuariosTable"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         PROVEEDORES
+                    ================================================== -->
+
+                    <section
+                        id="proveedores"
+                        class="module"
+                    >
+
+                        <div class="d-flex justify-content-between mb-4">
+
+                            <h2>
+                                Gestión de proveedores
+                            </h2>
+
+                            <button
+                                class="btn btn-success"
+                                data-bs-toggle="modal"
+                                data-bs-target="#proveedorModal"
+                            >
+                                <i class="bi bi-plus-circle"></i>
+                                Nuevo proveedor
+                            </button>
+
+                        </div>
+
+
+                        <div class="card table-card p-3">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>ID</th>
+                                            <th>Empresa</th>
+                                            <th>Contacto</th>
+                                            <th>Teléfono</th>
+                                            <th>Acciones</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="proveedoresTable"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         INVENTARIO
+                    ================================================== -->
+
+                    <section
+                        id="inventario"
+                        class="module"
+                    >
+
+                        <div class="d-flex justify-content-between mb-4">
+
+                            <h2>
+                                Gestión de inventario
+                            </h2>
+
+                            <button
+                                class="btn btn-warning"
+                                data-bs-toggle="modal"
+                                data-bs-target="#productoModal"
+                            >
+                                <i class="bi bi-plus-circle"></i>
+                                Nuevo producto
+                            </button>
+
+                        </div>
+
+
+                        <div class="card table-card p-3">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>ID</th>
+                                            <th>Producto</th>
+                                            <th>Categoría</th>
+                                            <th>Stock</th>
+                                            <th>Precio</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="productosTable"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         PAGOS
+                    ================================================== -->
+
+                    <section
+                        id="pagos"
+                        class="module"
+                    >
+
+                        <h2 class="mb-4">
+                            Gestión de pagos
+                        </h2>
+
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="card table-card p-4">
+
+                                    <h5 class="mb-3">
+                                        Registrar pago
+                                    </h5>
+
+                                    <form id="pagoForm">
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label">
+                                                Cliente
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                id="clientePago"
+                                                class="form-control"
+                                                required
+                                            >
+
+                                        </div>
+
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label">
+                                                Valor
+                                            </label>
+
+                                            <input
+                                                type="number"
+                                                id="valorPago"
+                                                class="form-control"
+                                                min="1"
+                                                required
+                                            >
+
+                                        </div>
+
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label">
+                                                Método de pago
+                                            </label>
+
+                                            <select
+                                                id="metodoPago"
+                                                class="form-select"
+                                            >
+
+                                                <option value="Efectivo">
+                                                    Efectivo
+                                                </option>
+
+                                                <option value="Tarjeta">
+                                                    Tarjeta
+                                                </option>
+
+                                                <option value="Transferencia">
+                                                    Transferencia
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+
+
+                                        <button
+                                            class="btn btn-danger w-100"
+                                            type="submit"
+                                        >
+
+                                            <i class="bi bi-check-circle"></i>
+                                            Registrar pago
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="card table-card p-4">
+
+                                    <h5>
+                                        Total vendido
+                                    </h5>
+
+                                    <h1
+                                        id="ventasPagos"
+                                        class="text-success"
+                                    >
+                                        $0
+                                    </h1>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card table-card p-3 mt-4">
+
+                            <h5>
+                                Historial de pagos
+                            </h5>
+
+                            <div class="table-responsive">
+
+                                <table class="table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Valor</th>
+                                            <th>Método</th>
+                                            <th>Fecha</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="pagosTable"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL USUARIO
+===================================================== -->
+
+<div
+    class="modal fade"
+    id="usuarioModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Nuevo usuario
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="usuarioForm">
+
+                    <input
+                        type="text"
+                        id="nombreUsuario"
+                        class="form-control mb-3"
+                        placeholder="Nombre"
+                        required
+                    >
+
+                    <input
+                        type="email"
+                        id="correoUsuario"
+                        class="form-control mb-3"
+                        placeholder="Correo"
+                        required
+                    >
+
+                    <select
+                        id="rolUsuario"
+                        class="form-select mb-3"
+                    >
+
+                        <option>Administrador</option>
+                        <option>Mesero</option>
+                        <option>Cajero</option>
+                        <option>Cocinero</option>
+
+                    </select>
+
+                    <button class="btn btn-danger w-100">
+                        Guardar usuario
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL PROVEEDOR
+===================================================== -->
+
+<div
+    class="modal fade"
+    id="proveedorModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Nuevo proveedor
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="proveedorForm">
+
+                    <input
+                        type="text"
+                        id="empresaProveedor"
+                        class="form-control mb-3"
+                        placeholder="Empresa"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="contactoProveedor"
+                        class="form-control mb-3"
+                        placeholder="Persona de contacto"
+                        required
+                    >
+
+                    <input
+                        type="tel"
+                        id="telefonoProveedor"
+                        class="form-control mb-3"
+                        placeholder="Teléfono"
+                        required
+                    >
+
+                    <button class="btn btn-success w-100">
+                        Guardar proveedor
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL PRODUCTO
+===================================================== -->
+
+<div
+    class="modal fade"
+    id="productoModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Nuevo producto
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="productoForm">
+
+                    <input
+                        type="text"
+                        id="nombreProducto"
+                        class="form-control mb-3"
+                        placeholder="Nombre del producto"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="categoriaProducto"
+                        class="form-control mb-3"
+                        placeholder="Categoría"
+                        required
+                    >
+
+                    <input
+                        type="number"
+                        id="stockProducto"
+                        class="form-control mb-3"
+                        placeholder="Stock"
+                        min="0"
+                        required
+                    >
+
+                    <input
+                        type="number"
+                        id="precioProducto"
+                        class="form-control mb-3"
+                        placeholder="Precio"
+                        min="0"
+                        required
+                    >
+
+                    <button class="btn btn-warning w-100">
+                        Guardar producto
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<script>
+
+/* =====================================================
+   DATOS INICIALES
+===================================================== */
+
+let usuarios = JSON.parse(
+    localStorage.getItem("usuarios")
+) || [
+    {
+        id: 1,
+        nombre: "Administrador",
+        correo: "admin@restaurante.com",
+        rol: "Administrador"
+    }
+];
+
+
+let proveedores = JSON.parse(
+    localStorage.getItem("proveedores")
+) || [];
+
+
+let productos = JSON.parse(
+    localStorage.getItem("productos")
+) || [];
+
+
+let pagos = JSON.parse(
+    localStorage.getItem("pagos")
+) || [];
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+        const username =
+            document.getElementById("username").value;
+
+        const password =
+            document.getElementById("password").value;
+
+
+        if (
+            username === "admin" &&
+            password === "1234"
+        ) {
+
+            document
+                .getElementById("loginScreen")
+                .style.display = "none";
+
+            document
+                .getElementById("app")
+                .style.display = "block";
+
+            cargarDatos();
+
+        } else {
+
+            const message =
+                document.getElementById("loginMessage");
+
+            message.textContent =
+                "Usuario o contraseña incorrectos.";
+
+            message.classList.remove("d-none");
+
+        }
+
+    });
+
+
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
+
+document
+    .querySelectorAll(".nav-link[data-module]")
+    .forEach(link => {
+
+        link.addEventListener("click", function(e) {
+
+            e.preventDefault();
+
+            const module =
+                this.dataset.module;
+
+
+            document
+                .querySelectorAll(".module")
+                .forEach(section => {
+
+                    section.classList.remove("active");
+
+                });
+
+
+            document
+                .getElementById(module)
+                .classList.add("active");
+
+
+            document
+                .querySelectorAll(".nav-link")
+                .forEach(item => {
+
+                    item.classList.remove("active");
+
+                });
+
+
+            this.classList.add("active");
+
+
+            const titles = {
+
+                dashboard: "Dashboard",
+
+                usuarios: "Gestión de usuarios",
+
+                proveedores: "Gestión de proveedores",
+
+                inventario: "Gestión de inventario",
+
+                pagos: "Gestión de pagos"
+
+            };
+
+
+            document
+                .getElementById("pageTitle")
+                .textContent = titles[module];
+
+        });
+
+    });
+
+
+/* =====================================================
+   USUARIOS
+===================================================== */
+
+document
+    .getElementById("usuarioForm")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+
+        const usuario = {
+
+            id: Date.now(),
+
+            nombre:
+                document.getElementById(
+                    "nombreUsuario"
+                ).value,
+
+            correo:
+                document.getElementById(
+                    "correoUsuario"
+                ).value,
+
+            rol:
+                document.getElementById(
+                    "rolUsuario"
+                ).value
+
+        };
+
+
+        usuarios.push(usuario);
+
+        guardarDatos();
+
+        cargarUsuarios();
+
+        this.reset();
+
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById("usuarioModal")
+            )
+            .hide();
+
+    });
+
+
+function cargarUsuarios() {
+
+    const table =
+        document.getElementById("usuariosTable");
+
+    table.innerHTML = "";
+
+
+    usuarios.forEach(usuario => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${usuario.id}</td>
+
+                <td>${usuario.nombre}</td>
+
+                <td>${usuario.correo}</td>
+
+                <td>
+                    <span class="badge bg-primary">
+                        ${usuario.rol}
+                    </span>
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-sm btn-danger"
+                        onclick="eliminarUsuario(${usuario.id})"
+                    >
+                        <i class="bi bi-trash"></i>
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+function eliminarUsuario(id) {
+
+    if (!confirm("¿Eliminar este usuario?")) return;
+
+    usuarios =
+        usuarios.filter(
+            usuario => usuario.id !== id
+        );
+
+    guardarDatos();
+
+    cargarUsuarios();
+
+    cargarDashboard();
+
+}
+
+
+/* =====================================================
+   PROVEEDORES
+===================================================== */
+
+document
+    .getElementById("proveedorForm")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+
+        const proveedor = {
+
+            id: Date.now(),
+
+            empresa:
+                document.getElementById(
+                    "empresaProveedor"
+                ).value,
+
+            contacto:
+                document.getElementById(
+                    "contactoProveedor"
+                ).value,
+
+            telefono:
+                document.getElementById(
+                    "telefonoProveedor"
+                ).value
+
+        };
+
+
+        proveedores.push(proveedor);
+
+        guardarDatos();
+
+        cargarProveedores();
+
+        this.reset();
+
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById("proveedorModal")
+            )
+            .hide();
+
+    });
+
+
+function cargarProveedores() {
+
+    const table =
+        document.getElementById("proveedoresTable");
+
+    table.innerHTML = "";
+
+
+    proveedores.forEach(proveedor => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${proveedor.id}</td>
+
+                <td>${proveedor.empresa}</td>
+
+                <td>${proveedor.contacto}</td>
+
+                <td>${proveedor.telefono}</td>
+
+                <td>
+
+                    <button
+                        class="btn btn-sm btn-danger"
+                        onclick="eliminarProveedor(${proveedor.id})"
+                    >
+
+                        <i class="bi bi-trash"></i>
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+function eliminarProveedor(id) {
+
+    if (!confirm("¿Eliminar este proveedor?")) return;
+
+    proveedores =
+        proveedores.filter(
+            proveedor => proveedor.id !== id
+        );
+
+    guardarDatos();
+
+    cargarProveedores();
+
+    cargarDashboard();
+
+}
+
+
+/* =====================================================
+   INVENTARIO
+===================================================== */
+
+document
+    .getElementById("productoForm")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+
+        const producto = {
+
+            id: Date.now(),
+
+            nombre:
+                document.getElementById(
+                    "nombreProducto"
+                ).value,
+
+            categoria:
+                document.getElementById(
+                    "categoriaProducto"
+                ).value,
+
+            stock:
+                Number(
+                    document.getElementById(
+                        "stockProducto"
+                    ).value
+                ),
+
+            precio:
+                Number(
+                    document.getElementById(
+                        "precioProducto"
+                    ).value
+                )
+
+        };
+
+
+        productos.push(producto);
+
+        guardarDatos();
+
+        cargarProductos();
+
+        this.reset();
+
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById("productoModal")
+            )
+            .hide();
+
+    });
+
+
+function cargarProductos() {
+
+    const table =
+        document.getElementById("productosTable");
+
+    table.innerHTML = "";
+
+
+    productos.forEach(producto => {
+
+        let estado = "";
+
+        if (producto.stock <= 5) {
+
+            estado =
+                `<span class="badge bg-danger">
+                    Stock bajo
+                </span>`;
+
+        } else {
+
+            estado =
+                `<span class="badge bg-success">
+                    Disponible
+                </span>`;
+
+        }
+
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${producto.id}</td>
+
+                <td>${producto.nombre}</td>
+
+                <td>${producto.categoria}</td>
+
+                <td>${producto.stock}</td>
+
+                <td>
+                    $${producto.precio.toLocaleString()}
+                </td>
+
+                <td>${estado}</td>
+
+                <td>
+
+                    <button
+                        class="btn btn-sm btn-danger"
+                        onclick="eliminarProducto(${producto.id})"
+                    >
+
+                        <i class="bi bi-trash"></i>
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+function eliminarProducto(id) {
+
+    if (!confirm("¿Eliminar este producto?")) return;
+
+    productos =
+        productos.filter(
+            producto => producto.id !== id
+        );
+
+    guardarDatos();
+
+    cargarProductos();
+
+    cargarDashboard();
+
+}
+
+
+/* =====================================================
+   PAGOS
+===================================================== */
+
+document
+    .getElementById("pagoForm")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+
+        const pago = {
+
+            id: Date.now(),
+
+            cliente:
+                document.getElementById(
+                    "clientePago"
+                ).value,
+
+            valor:
+                Number(
+                    document.getElementById(
+                        "valorPago"
+                    ).value
+                ),
+
+            metodo:
+                document.getElementById(
+                    "metodoPago"
+                ).value,
+
+            fecha:
+                new Date().toLocaleString("es-CO")
+
+        };
+
+
+        pagos.push(pago);
+
+        guardarDatos();
+
+        cargarPagos();
+
+        cargarDashboard();
+
+        this.reset();
+
+
+        alert(
+            "Pago registrado correctamente."
+        );
+
+    });
+
+
+function cargarPagos() {
+
+    const table =
+        document.getElementById("pagosTable");
+
+    table.innerHTML = "";
+
+
+    pagos.forEach(pago => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${pago.id}</td>
+
+                <td>${pago.cliente}</td>
+
+                <td>
+                    $${pago.valor.toLocaleString()}
+                </td>
+
+                <td>${pago.metodo}</td>
+
+                <td>${pago.fecha}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    const total =
+        pagos.reduce(
+            (sum, pago) =>
+                sum + pago.valor,
+            0
+        );
+
+
+    document
+        .getElementById("ventasPagos")
+        .textContent =
+        "$" + total.toLocaleString();
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function cargarDashboard() {
+
+    document
+        .getElementById("totalUsuarios")
+        .textContent =
+        usuarios.length;
+
+
+    document
+        .getElementById("totalProveedores")
+        .textContent =
+        proveedores.length;
+
+
+    document
+        .getElementById("totalProductos")
+        .textContent =
+        productos.length;
+
+
+    const ventas =
+        pagos.reduce(
+            (sum, pago) =>
+                sum + pago.valor,
+            0
+        );
+
+
+    document
+        .getElementById("totalVentas")
+        .textContent =
+        "$" + ventas.toLocaleString();
+
+}
+
+
+/* =====================================================
+   GUARDAR DATOS
+===================================================== */
+
+function guardarDatos() {
+
+    localStorage.setItem(
+        "usuarios",
+        JSON.stringify(usuarios)
+    );
+
+    localStorage.setItem(
+        "proveedores",
+        JSON.stringify(proveedores)
+    );
+
+    localStorage.setItem(
+        "productos",
+        JSON.stringify(productos)
+    );
+
+    localStorage.setItem(
+        "pagos",
+        JSON.stringify(pagos)
+    );
+
+}
+
+
+/* =====================================================
+   CARGAR DATOS
+===================================================== */
+
+function cargarDatos() {
+
+    cargarUsuarios();
+
+    cargarProveedores();
+
+    cargarProductos();
+
+    cargarPagos();
+
+    cargarDashboard();
+
+}
+
+
+/* =====================================================
+   CERRAR SESIÓN
+===================================================== */
+
+document
+    .getElementById("logoutBtn")
+    .addEventListener("click", function(e) {
+
+        e.preventDefault();
+
+        document
+            .getElementById("app")
+            .style.display = "none";
+
+        document
+            .getElementById("loginScreen")
+            .style.display = "flex";
+
+        document
+            .getElementById("loginForm")
+            .reset();
+
+    });
+
+</script>
+
+</body>
+</html>

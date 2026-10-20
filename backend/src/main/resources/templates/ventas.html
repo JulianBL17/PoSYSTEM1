@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Ventas</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+  <h1>Ventas</h1>
+  <a th:href="@{/}">Inicio</a>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Producto</th>
+      <th>Cantidadd</th>
+      <th>Total</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+    <tr th:each="v : ${ventas}">
+      <td th:text="${v.id}"></td>
+      <td th:text="${v.producto.nombre}"></td>
+      <td th:text="${v.cantidad}"></td>
+      <td th:text="${v.total}"></td>
+      <td th:text="${v.fecha}"></td>
+      <td>
+        
+        <a th:href="@{/ventas/eliminar/{id}(id=${v.id})}">Eliminar</a> |
+        <a th:href="@{/ventas/editar/{id}(id=${v.id})}">Editar</a>
+
+      </td>
+    </tr>
+  </table>
+
+  <h3>Agregar / Editar Venta</h3>
+  <form th:action="@{/ventas/guardar}" th:object="${ventaForm}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    Producto: 
+    <select th:field="*{producto.id}">
+      <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+    </select><br/>
+    Cantidad: <input type="number" th:field="*{cantidad}" /><br/>
+    <button type="submit">Guardar</button>
+  </form>
+  
+
+</body>
+</html>

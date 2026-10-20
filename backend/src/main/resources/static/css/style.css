@@ -1,0 +1,13 @@
+/* Estilos generales para POS */
+body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 0; color: #2c3e50; }
+h1, h3 { text-align: center; margin-top: 20px; color: #2c3e50; }
+.menu { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+.menu a { padding: 15px 30px; background-color: #3498db; color: white; border-radius: 8px; text-decoration: none; font-weight: bold; }
+.menu a:hover { background-color: #2980b9; }
+table { margin: 20px auto; border-collapse: collapse; width: 80%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+th { background-color: #3498db; color: white; }
+form { width: 60%; margin: 20px auto; padding: 15px; background: white; border: 1px solid #ddd; border-radius: 8px; }
+input, select, button { display: block; margin: 10px auto; padding: 8px; width: 80%; border: 1px solid #ccc; border-radius: 5px; }
+button { background-color: #3498db; color: white; font-weight: bold; cursor: pointer; }
+button:hover { background-color: #2980b9; }

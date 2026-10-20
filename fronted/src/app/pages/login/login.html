@@ -1,0 +1,57 @@
+<main class="login-page container-fluid d-flex align-items-center justify-content-center min-vh-100 p-3">
+  <section class="login-panel card w-100">
+    <div class="card-body p-4 p-sm-5">
+      <div class="login-brand-mark mb-4" aria-hidden="true">
+        <i class="bi bi-shop"></i>
+      </div>
+
+      <p class="login-eyebrow mb-2">Punto de venta</p>
+      <h1 class="h3 fw-bold mb-2">Inicia sesión</h1>
+      <p class="text-secondary mb-4">Ingresa tus datos para continuar al sistema.</p>
+
+      <form (ngSubmit)="iniciarSesion()">
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="email">Correo electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input
+              id="email"
+              class="form-control"
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              autocomplete="username"
+              placeholder="nombre@empresa.com"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold" for="password">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input
+              id="password"
+              class="form-control"
+              type="password"
+              name="password"
+              [(ngModel)]="password"
+              autocomplete="current-password"
+              placeholder="Escribe tu contraseña"
+              required
+            />
+          </div>
+        </div>
+
+        @if (error) {
+          <div class="alert alert-danger py-2" role="alert">{{ error }}</div>
+        }
+
+        <button class="btn btn-success w-100 py-2" type="submit" [disabled]="cargando">
+          <i class="bi bi-box-arrow-in-right me-2"></i>{{ cargando ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+      </form>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,40 @@
+
+# Maven / compilados
+target/
+*.class
+*.jar
+*.war
+
+# Logs
+*.log
+logs/
+
+# Variables de entorno y secretos
+.env
+*.env
+application-local.properties
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+.apt_generated/
+.factorypath
+.springBeans
+.sts4-cache/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Frontend (si tienes uno en el mismo repo)
+node_modules/
