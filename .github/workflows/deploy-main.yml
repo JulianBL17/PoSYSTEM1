@@ -18,6 +18,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             # Entra a la carpeta de producción
             cd /root/projects/electivaVNocturno/equipo-2/PoSYSTEM1_main/
