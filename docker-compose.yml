@@ -31,7 +31,8 @@ services:
     depends_on:
       - backend
     ports:
-      - "4200:80"
+      # CAMBIO CLAVE: Usa la variable FRONTEND_PORT. Si no existe, usa 4200 por defecto.
+      - "${FRONTEND_PORT:-4200}:80"
 
 volumes:
   pgdata:
