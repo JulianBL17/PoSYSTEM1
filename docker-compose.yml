@@ -22,9 +22,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/posb
       SPRING_DATASOURCE_USERNAME: posb
       SPRING_DATASOURCE_PASSWORD: "12345"
-    # Para depurar la API directamente desde tu PC, descomenta:
-    # ports:
-    #   - "8080:8080"
+    ports:
+      # CAMBIO CLAVE: Puerto abierto y enlazado a la variable del VPS
+      - "${SERVER_PORT:-8081}:8080"
 
   frontend:
     build: ./fronted
