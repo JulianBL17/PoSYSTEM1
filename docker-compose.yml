@@ -19,9 +19,9 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/posb
-      SPRING_DATASOURCE_USERNAME: posb
-      SPRING_DATASOURCE_PASSWORD: "12345"
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     ports:
       # Enlazado explícito a 127.0.0.1 para que Nginx lo alcance correctamente en el puerto 8081
       - "127.0.0.1:${SERVER_PORT:-8081}:8080"
