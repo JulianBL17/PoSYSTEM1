@@ -19,20 +19,20 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/posb
-      SPRING_DATASOURCE_USERNAME: posb
-      SPRING_DATASOURCE_PASSWORD: "12345"
-    # Para depurar la API directamente desde tu PC, descomenta:
-    # ports:
-    #   - "8080:8080"
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    ports:
+      # Enlazado explícito a 127.0.0.1 para que Nginx lo alcance correctamente en el puerto 8081
+      - "127.0.0.1:${SERVER_PORT:-8081}:8080"
 
   frontend:
     build: ./fronted
     depends_on:
       - backend
     ports:
-      # CAMBIO CLAVE: Usa la variable FRONTEND_PORT. Si no existe, usa 4200 por defecto.
-      - "${FRONTEND_PORT:-4200}:80"
+      # Enlazado explícito a 127.0.0.1 para el entorno dev (puerto 4201) o main
+      - "127.0.0.1:${FRONTEND_PORT:-4201}:80"
 
 volumes:
   pgdata:

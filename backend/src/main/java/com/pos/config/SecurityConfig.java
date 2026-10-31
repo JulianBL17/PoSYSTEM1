@@ -36,19 +36,15 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authProvider =
-                new DaoAuthenticationProvider();
-
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(usuarioService);
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
-
         return config.getAuthenticationManager();
     }
 
@@ -57,18 +53,17 @@ public class SecurityConfig {
             throws Exception {
 
         http
-            .cors(Customizer.withDefaults())   // usa el bean corsConfigurationSource
+            .cors(Customizer.withDefaults())   // Usa el bean corsConfigurationSource de abajo
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
-
-                // Login
+                // Login tradicional y recursos estáticos
                 .requestMatchers(
                     "/login",
                     "/css/**"
                 ).permitAll()
 
-                // APIs utilizadas por Angular
+                // APIs utilizadas por Angular (Acceso público para autenticación y servicios)
                 .requestMatchers(
                     "/api/auth/**",
                     "/api/productos/**",
@@ -76,7 +71,7 @@ public class SecurityConfig {
                     "/api/ventas/**"
                 ).permitAll()
 
-                // Por ahora, permitir el resto
+                // Permitir el resto de solicitudes
                 .anyRequest().permitAll()
             )
 
@@ -94,8 +89,7 @@ public class SecurityConfig {
     }
 
     /**
-     * CORS global: orígenes permitidos (Angular) definidos en application.properties
-     * con la propiedad pos.cors.allowed-origins (separados por coma).
+     * CORS global: Lee los orígenes permitidos desde el archivo application.properties
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
@@ -105,6 +99,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(Arrays.asList(origenesPermitidos));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);
