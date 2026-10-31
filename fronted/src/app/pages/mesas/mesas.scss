@@ -1,0 +1,30 @@
+.pos-page {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 60px);
+}
+
+// Cuadrícula responsiva que se adapta automáticamente al ancho
+.grid-mesas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1.25rem;
+}
+
+.mesa-card {
+  height: 120px;
+  cursor: pointer;
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border 0.1s;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+
+  // Resalta visualmente la mesa cuando se hace clic en ella
+  &.mesa-seleccionada {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.5) !important; // Borde azul estilo "focus"
+    z-index: 1;
+  }
+}

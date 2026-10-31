@@ -1,0 +1,89 @@
+<div class="container-fluid pos-page px-3 px-lg-4 py-4">
+
+  <!-- ENCABEZADO -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+    <div>
+      <h2 class="fw-bold"><i class="bi bi-truck me-2"></i>Gestión de Proveedores</h2>
+      <p class="text-muted mb-0">Directorio de reabastecimiento de insumos</p>
+    </div>
+    <span class="badge bg-primary fs-6">{{ proveedores.length }} proveedores</span>
+  </div>
+
+  <div *ngIf="mensaje" class="alert alert-dismissible fade show" [ngClass]="claseAviso" role="alert">
+    {{ mensaje }}
+    <button type="button" class="btn-close" (click)="cerrarAviso()"></button>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+      <i class="bi" [ngClass]="editando ? 'bi-pencil' : 'bi-plus-circle'"></i>
+      {{ editando ? ' Editar Proveedor' : ' Registrar Proveedor' }}
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="guardarProveedor()" class="row g-3 align-items-end">
+        
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Empresa / Razón Social *</label>
+          <input type="text" class="form-control" [(ngModel)]="proveedor.nombreEmpresa" name="nombreEmpresa" required>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Contacto (Vendedor)</label>
+          <input type="text" class="form-control" [(ngModel)]="proveedor.nombreContacto" name="nombreContacto">
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Teléfono</label>
+          <input type="text" class="form-control" [(ngModel)]="proveedor.telefono" name="telefono">
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Correo</label>
+          <input type="email" class="form-control" [(ngModel)]="proveedor.correo" name="correo">
+        </div>
+
+        <div class="col-md-2 d-flex gap-2">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-save me-1"></i>{{ editando ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button type="button" class="btn btn-secondary" *ngIf="editando" (click)="limpiarFormulario()">
+            <i class="bi bi-x-circle"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TABLA -->
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="ps-4">Empresa</th>
+            <th>Contacto</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th class="text-center pe-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prov of proveedores">
+            <td class="ps-4 fw-semibold">{{ prov.nombreEmpresa }}</td>
+            <td>{{ prov.nombreContacto || '-' }}</td>
+            <td>{{ prov.telefono || '-' }}</td>
+            <td>{{ prov.correo || '-' }}</td>
+            <td class="text-center pe-4">
+              <button class="btn btn-sm btn-warning me-2" (click)="editarProveedor(prov)" title="Editar"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-danger" (click)="eliminarProveedor(prov.id)" title="Eliminar"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+          <tr *ngIf="proveedores.length === 0">
+            <td colspan="5" class="text-center text-muted py-4"><i class="bi bi-inbox fs-2 d-block mb-2"></i>No hay proveedores registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

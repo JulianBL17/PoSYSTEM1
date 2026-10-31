@@ -1,0 +1,29 @@
+.pos-page {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 60px);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// Estilos para el switch de Bootstrap
+.form-check-input:checked {
+  background-color: #198754; // Verde success de Bootstrap
+  border-color: #198754;
+}
+
+// Transición suave para filas
+.table-hover tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+// Efecto de las tarjetas
+.card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  
+  .card-header {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+}
