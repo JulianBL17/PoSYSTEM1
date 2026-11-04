@@ -31,6 +31,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // Nota: Para producción, se recomienda cambiar NoOpPasswordEncoder por BCryptPasswordEncoder
         return NoOpPasswordEncoder.getInstance();
     }
 
@@ -49,30 +50,30 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
             .cors(Customizer.withDefaults())   // Usa el bean corsConfigurationSource de abajo
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
-                // Login tradicional y recursos estáticos
+                // Login tradicional y recursos estáticos (Acceso público)
                 .requestMatchers(
                     "/login",
-                    "/css/**"
+                    "/css/**",
+                    "/api/auth/**"
                 ).permitAll()
 
-                // APIs utilizadas por Angular (Acceso público para autenticación y servicios)
-                .requestMatchers(
-                    "/api/auth/**",
-                    "/api/productos/**",
-                    "/api/usuarios/**",
-                    "/api/ventas/**"
-                ).permitAll()
+                // Restricciones por jerarquía de roles (Soporta autoridades con y sin prefijo ROLE_)
+                .requestMatchers("/api/usuarios/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
+                .requestMatchers("/api/descuentos/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
+                .requestMatchers("/api/mesas/**").hasAnyAuthority("ADMIN", "MESERO", "ROLE_ADMIN", "ROLE_MESERO")
+                .requestMatchers("/api/productos/**").hasAnyAuthority("ADMIN", "INVENTARIO", "ROLE_ADMIN", "ROLE_INVENTARIO")
+                .requestMatchers("/api/proveedores/**").hasAnyAuthority("ADMIN", "INVENTARIO", "ROLE_ADMIN", "ROLE_INVENTARIO")
+                .requestMatchers("/api/ventas/**").hasAnyAuthority("ADMIN", "CAJERO", "MESERO", "ROLE_ADMIN", "ROLE_CAJERO", "ROLE_MESERO")
 
-                // Permitir el resto de solicitudes
-                .anyRequest().permitAll()
+                // Cualquier otra solicitud requiere estar autenticado
+                .anyRequest().authenticated()
             )
 
             .formLogin(form -> form
